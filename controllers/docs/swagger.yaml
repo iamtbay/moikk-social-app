@@ -1,0 +1,656 @@
+basePath: api/v1
+definitions:
+  mytypes.Login:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  mytypes.NewComment:
+    properties:
+      content:
+        type: string
+    type: object
+  mytypes.NewPost:
+    properties:
+      content:
+        type: string
+      files:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      user_id:
+        type: string
+    type: object
+  mytypes.Register:
+    properties:
+      email:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  mytypes.UpdatePost:
+    properties:
+      content:
+        type: string
+      files:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+    type: object
+  mytypes.UserInfos:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      profile_photo:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a sample server MoikkSocialApp.
+  title: Moikk-Social-App
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login for User
+      operationId: login-user
+      parameters:
+      - description: User login data
+        in: body
+        name: userInfo
+        required: true
+        schema:
+          $ref: '#/definitions/mytypes.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User Login
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      description: Logout For User
+      operationId: logout-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Logout for User
+      tags:
+      - auth
+  /auth/profilePhoto:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload Profile Photo For User
+      operationId: upload-profilePhoto-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Upload Profile Photo For User
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register For New User
+      operationId: register-user
+      parameters:
+      - description: User register data
+        in: body
+        name: userInfo
+        required: true
+        schema:
+          $ref: '#/definitions/mytypes.Register'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Succesful register
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register For New User
+      tags:
+      - auth
+  /auth/updateUser:
+    patch:
+      consumes:
+      - application/json
+      description: Update Infos For User
+      operationId: update-user
+      parameters:
+      - description: User Update Info data
+        in: body
+        name: userInfo
+        required: true
+        schema:
+          $ref: '#/definitions/mytypes.UserInfos'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Update Infos For User
+      tags:
+      - auth
+  /comments/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all comments relavant to post id
+      operationId: get-all-comments-by-postID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get All Comments By PostID
+      tags:
+      - comments
+  /comments/delete/{id}/{commentID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Comment by Comment ID
+      operationId: deletecomment
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Delete a Comment
+      tags:
+      - comments
+  /comments/new/{id}:
+    post:
+      consumes:
+      - application/json
+      description: New Comment to a Post ID
+      operationId: newcomment
+      parameters:
+      - description: New Comment data
+        in: body
+        name: commentInfo
+        required: true
+        schema:
+          $ref: '#/definitions/mytypes.NewComment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: New Comment
+      tags:
+      - comments
+  /comments/single/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get single comment by commentID
+      operationId: get-a-comment-by-id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Single Comment By ID
+      tags:
+      - comments
+  /comments/update/{id}/{commentID}:
+    patch:
+      consumes:
+      - application/json
+      description: Update a Comment by ID
+      operationId: updatecomment
+      parameters:
+      - description: Update Comment data
+        in: body
+        name: commentInfo
+        required: true
+        schema:
+          $ref: '#/definitions/mytypes.NewComment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Update Comment
+      tags:
+      - comments
+  /follows/{username}:
+    patch:
+      consumes:
+      - application/json
+      description: Unfollow a user by username
+      operationId: unfollow-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Unfollow A User
+      tags:
+      - follows
+    post:
+      consumes:
+      - application/json
+      description: Follow a user by username
+      operationId: follow-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Follow A User
+      tags:
+      - follows
+  /follows/followeds/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Get all followeds by username
+      operationId: get-all-followeds-by-username
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get User's Followeds
+      tags:
+      - follows
+  /follows/followers/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Get all followers by username
+      operationId: get-all-followers-by-username
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get User's Followers
+      tags:
+      - follows
+  /likes/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get All Likes by PostID
+      operationId: get-all-likes-by-id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Likes By PostID
+      tags:
+      - likes
+    patch:
+      consumes:
+      - application/json
+      description: Unlike a Post by postID
+      operationId: unlike-post-by-id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Unlike a Post
+      tags:
+      - likes
+    post:
+      consumes:
+      - application/json
+      description: Like a Post by postID
+      operationId: like-post-by-id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Like a Post
+      tags:
+      - likes
+  /likes/user/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Get User's Likes
+      operationId: get-all-likes-by-username
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Likes By Username
+      tags:
+      - likes
+  /posts/:
+    get:
+      consumes:
+      - application/json
+      description: Get All Post By User's followed users
+      operationId: get-all-post
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get All Post By Followed users
+      tags:
+      - posts
+  /posts/{postID}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Post
+      operationId: delete-post
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Delete a Post By ID
+      tags:
+      - posts
+    patch:
+      consumes:
+      - application/json
+      description: Update a Post
+      operationId: update-post
+      parameters:
+      - description: Update Post data
+        in: body
+        name: postInfo
+        required: true
+        schema:
+          $ref: '#/definitions/mytypes.UpdatePost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Update a Post By ID
+      tags:
+      - posts
+  /posts/new:
+    post:
+      consumes:
+      - application/json
+      description: Create a New Post
+      operationId: create-new-post
+      parameters:
+      - description: New Post data
+        in: body
+        name: postInfo
+        required: true
+        schema:
+          $ref: '#/definitions/mytypes.NewPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Create a New Post
+      tags:
+      - posts
+  /posts/single/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get single Post by id
+      operationId: get-a-post
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Single Post by id
+      tags:
+      - posts
+  /posts/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload file.
+      operationId: upload-file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Upload a File
+      tags:
+      - posts
+  /posts/user/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Get User's all posts
+      operationId: get-all-post-by-username
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get All Post By User name
+      tags:
+      - posts
+  /search/posts:
+    get:
+      description: Search Posts by providing a Query
+      operationId: search-posts-by-query
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Search Posts by Query
+      tags:
+      - search
+  /search/users:
+    get:
+      description: Search Users by providing a Query
+      operationId: search-users-by-query
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Search Users by Query
+      tags:
+      - search
+swagger: "2.0"
